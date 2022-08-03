@@ -23,22 +23,26 @@
 	</beans:bean> -->
 	
 	<context:component-scan base-package="com.myspring.pro30" />
+	
+	
 
 	<!-- 타일즈 실습 설정 -->
 	<beans:bean id="tilesConfigurer"
 		class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+		
 		<beans:property name="definitions">
 			<beans:list>
 				<beans:value>classpath:tiles/*.xml</beans:value>
 			</beans:list>
 		</beans:property>
-		<beans:property name="preparerFactoryClass"
-			value="org.springframework.web.servlet.view.tiles3.SpringBeanPreparerFactory" />
+		
+		<beans:property name="preparerFactoryClass" value="org.springframework.web.servlet.view.tiles3.SpringBeanPreparerFactory" />
+			
 	</beans:bean>
+	
 	<beans:bean id="viewResolver"
 		class="org.springframework.web.servlet.view.UrlBasedViewResolver">
-		<beans:property name="viewClass"
-			value="org.springframework.web.servlet.view.tiles3.TilesView" />
+		<beans:property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView" />
 	</beans:bean>
 	
 
@@ -49,9 +53,16 @@
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/*/*.do" />
-			<beans:bean	class="com.myspring.pro30.member.interceptor.ViewNameInterceptor" />
+			<beans:bean	class="com.myspring.pro30.common.interceptor.ViewNameInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>
 	
+	<!-- 멀티파트 리졸버 -->
+	<!-- 이미지 업로드에 필요한것. 이미지파일크기~ 용량~ 방식~ -->
+	<beans:bean id="multipartResolver" 	class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<beans:property name="maxUploadSize" value="52428800" />
+		<beans:property name="maxInMemorySize" value="52428800" />
+		<beans:property name="defaultEncoding" value="utf-8" />
+	</beans:bean>
 	
 </beans:beans>
