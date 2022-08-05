@@ -12,13 +12,13 @@
     <result property="content" column="content" />
     <result property="writeDate" column="writeDate" />
     <result property="imageFileName" column="imageFileName" />
-  </resultMap> 
-  
-  <!-- <resultMap id="imgResult" type="imageVO">
-	  <result property="imageFileNO" column="imageFileNO" />
-	  <result property="articleNO" column="articleNO" />
-	  <result property="imageFileName" column="imageFileName" />
- </resultMap> -->
+  </resultMap>
+
+	<resultMap id="imgResult" type="imageVO">
+		<result property="imageFileNO" column="imageFileNO" />
+		<result property="articleNO" column="articleNO" />
+		<result property="imageFileName" column="imageFileName" />
+	</resultMap> 
 
   <select id="selectAllArticlesList" resultMap="articlesResult"   >
     <![CDATA[
@@ -32,12 +32,12 @@
   
 	<!--단일이미지 추가  -->
 	 
-  <insert id="insertNewArticle"  parameterType="java.util.Map">
+<!--   <insert id="insertNewArticle"  parameterType="java.util.Map">
 		<![CDATA[
 			INSERT into t_board(articleNO,  title, content, imageFileName, id)
 			VALUES(#{articleNO},#{title},	#{content}, #{imageFileName},	#{id})
 		]]>      
-	</insert>
+	</insert> -->
 	
   <select id="selectNewArticleNO" resultType="int"  >
 		<![CDATA[
@@ -73,8 +73,8 @@
   </delete>
 
  <!--다중 이미지 추가 SQL문 -->   
-  <!--
-    <insert id="insertNewArticle"  parameterType="java.util.Map">
+ 
+  <insert id="insertNewArticle"  parameterType="java.util.Map">
     <![CDATA[
       insert into t_board(articleNO, id, title, content, imageFileName)
       values(#{articleNO}, #{id}, #{title}, #{content}, null)
@@ -89,9 +89,9 @@
       VALUES (#{item.imageFileNO}, #{item.imageFileName}, #{item.articleNO}, sysdate)
     </foreach>
   </insert>
- -->
  
-  <!-- <select id="selectNewImageFileNO" resultType="int"  >
+ 
+   <select id="selectNewImageFileNO" resultType="int"  >
     <![CDATA[
       SELECT  nvl(max(imageFileNO),0) from t_imageFile		
     ]]>
@@ -103,6 +103,6 @@
       SELECT * from t_imageFile
       where articleNO=#{articleNO}	
     ]]>
-  </select> --> 
+  </select>  
   
 </mapper>

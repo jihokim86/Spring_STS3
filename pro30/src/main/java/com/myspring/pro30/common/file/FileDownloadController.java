@@ -20,6 +20,7 @@ public class FileDownloadController {
 	protected void download(@RequestParam("imageFileName") String imageFileName,
 							@RequestParam("articleNO") String articleNO,
 			                 HttpServletResponse response)throws Exception {
+		
 		OutputStream out = response.getOutputStream();
 		String downFile = ARTICLE_IMAGE_REPO + "\\" +articleNO+"\\"+ imageFileName;
 		File file = new File(downFile);

@@ -16,10 +16,12 @@ public class ImageVO {
 	public void setImageFileNO(int imageFileNO) {
 		this.imageFileNO = imageFileNO;
 	}
+	
 	public String getImageFileName() {
 		return imageFileName;
 	}
-	public void setImageFileName(String imageFileName) {
+	
+	public void setImageFileName(String imageFileName) { // imageVO.setImageFileName(fileName);
 		try {
 			if(imageFileName!= null && imageFileName.length()!=0) {
 				this.imageFileName = URLEncoder.encode(imageFileName,"UTF-8");

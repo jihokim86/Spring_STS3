@@ -5,10 +5,19 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="contextPath"  value="${pageContext.request.contextPath}"  />
 
-<%-- 
-<c:set var="article"  value="${articleMap.article}"  />
+
+<c:set var="article"  value="${articleMap.article}"  /> 
+<!-- articleMap내에 있는  article은 뭐지??? 리스트인가??
+	VO구나~~~
+		ArticleVO articleVO = boardDAO.selectArticle(articleNO);
+		List<ImageVO> imageFileList = boardDAO.selectImageFileList(articleNO);
+		
+		articleMap.put("article", articleVO);
+		articleMap.put("imageFileList", imageFileList);
+-->
+
 <c:set var="imageFileList"  value="${articleMap.imageFileList}"  />
- --%>
+<!-- articleMap내에 있는  imageFileList은 뭐지??? 이미지리스트구나~-->
  
 <%
   request.setCharacterEncoding("UTF-8");
@@ -96,8 +105,7 @@
  </script>
 </head>
 <body>
-	<form name="frmArticle" method="post" action="${contextPath}"
-		enctype="multipart/form-data">
+	<form name="frmArticle" method="post" action="${contextPath}" enctype="multipart/form-data">
 		<table border=0 align="center">
 			<tr>
 				<td width=150 align="center" bgcolor=#FF9933>글번호</td>
@@ -144,26 +152,35 @@
  </c:if>
  	 --%>
 
-			<c:choose>
-				<c:when
+			<%--<c:choose>
+	 			<c:when
 					test="${not empty article.imageFileName && article.imageFileName!='null' }">
 					<tr>
 						<!-- <tr id="tr_file_upload"> -->
-						<td width="150" align="center" bgcolor="#FF9933" rowspan="2">
+						<td width="150" align="center" bgcolor="#FF9933" rowspan="2"> 
 							이미지
-						</td>
-						<td>
-						<input type="hidden" name="originalFileName" value="${article.imageFileName }" /> 
-						<img src="${contextPath}/download.do?articleNO=${article.articleNO}&imageFileName=${article.imageFileName}"	id="preview" />
-						<br>
-						</td>
-					</tr>
-					<tr>
-						<td></td>
-						<td>
-						<input type="file" name="imageFileName" id="i_imageFileName" disabled onchange="readURL(this);" />
-						</td>
-					</tr>
+							</td>--%>
+				<c:choose>
+					<c:when test="${not empty imageFileList && imageFileList != 'null'}">
+						<c:forEach var="item" items="${imageFileList}" varStatus="status">
+						<tr>
+							<td width="150" align="center" bgcolor="#FF9933" rowspan="2">
+								이미지${status.count }
+							</td>
+
+							<td>
+								<input type="hidden" name="originalFileName" value="${article.imageFileName }" /> 
+								<img src="${contextPath}/download.do?articleNO=${article.articleNO}&imageFileName=${item.imageFileName}" id="preview" /> 
+							<br>
+							</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>
+								<input type="file" name="imageFileName"	id="i_imageFileName" disabled onchange="readURL(this);" />
+							</td>
+						</tr>
+						</c:forEach>
 				</c:when>
 				<c:otherwise>
 					<tr id="tr_file_upload" style="visibility: hidden">
