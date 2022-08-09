@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+   
+   <mapper namespace="mapper.news">
+   	<resultMap type="newsVO" id="newsResult">
+   		<result property="newsNo" column="newsNo"/>
+   		<result property="newsTitle" column="newsTitle"/>
+   		<result property="newsContent" column="newsContent"/>
+   		<result property="newsWriteDate" column="newsWriteDate"/>
+   	</resultMap>
+   	
+   	<select id="selectNewsList" resultMap="newsResult">
+   		<![CDATA[
+   			select * from news
+   		]]>
+   	</select>
+   </mapper>

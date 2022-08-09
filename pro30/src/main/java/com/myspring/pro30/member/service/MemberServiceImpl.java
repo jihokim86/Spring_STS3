@@ -25,7 +25,6 @@ public class MemberServiceImpl implements MemberService {
 		return membersList;
 	}
 
-	
 	//2.로그인 메소드
 	@Override
 	public MemberVO login(MemberVO memberVO) throws Exception {
@@ -37,6 +36,20 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int addMember(MemberVO memberVO) throws DataAccessException {
 			int result = memberDAO.insertMember(memberVO);
+		return result;
+	}
+
+	//4.회원수정 메소드
+	@Override
+	public void modMember(MemberVO memberVO) throws DataAccessException {
+		memberDAO.updateMember(memberVO);
+		
+	}
+
+	//5.회원삭제 메소드
+	@Override
+	public int removeMember(String id) throws DataAccessException {
+		int result = memberDAO.deleteMember(id);
 		return result;
 	}
 	

@@ -30,13 +30,25 @@ public class MemberDAOImpl implements MemberDAO {
 		return mVO;
 	}
 	
-	//3.회원가입 메소드 필요사항
+	//3.회원가입 메소드 
 	@Override
 	public int insertMember(MemberVO memberVO) throws DataAccessException {
 			int result = sqlSession.insert("mapper.member.insertMember", memberVO);
 		return result;
 	}
-	
+
+	//4.회원수정 메소드 
+	@Override
+	public void updateMember(MemberVO memberVO) throws DataAccessException {
+		sqlSession.update("mapper.member.updateMember",memberVO);
+	}
+
+	//5.회원삭제 메소드
+	@Override
+	public int deleteMember(String id) throws DataAccessException {
+		int result = sqlSession.delete("mapper.member.deleteMember",id);
+		return result;
+	}
 	
 	
 	

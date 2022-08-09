@@ -24,7 +24,7 @@
 
 			<tr>
 				<td>이름</td>
-				<td><input type="text" name="name" id=""name"" /></td>
+				<td><input type="text" name="name" id="" /></td>
 			</tr>
 
 			<tr>

@@ -17,7 +17,7 @@
 </head>
 <body>
 
-	<table border=0 width="100%">
+	<table width="100%">
 		<tr>
 
 			<td>
@@ -34,14 +34,26 @@
 				<c:choose>
 
 					<c:when test="${login == 1 && memberVO != null}">
+						
 						<h3>환영합니다. ${memberVO.name}님!</h3>
-						<td>
-							<a href="${contextPath}/member/memberinfo.do"><h3>회원정보</h3></a>
-						</td>
-					
-						<td>
-							<a href="${contextPath}/member/logout.do"><h3>로그아웃</h3></a>
-						</td>
+						
+						<c:choose>
+							<c:when test="${memberVO.id == 'admin' }">
+								<td><a href="${contextPath}/member/listMembers.do"><h3>회원관리</h3></a>
+								</td>
+								<td><a href="${contextPath}/member/modForm.do"><h3>회원정보</h3></a>
+								</td>
+								<td><a href="${contextPath}/member/logout.do"><h3>로그아웃</h3></a>
+								</td>
+							</c:when>
+							<c:otherwise>
+								<td></td>
+								<td><a href="${contextPath}/member/modForm.do"><h3>회원정보</h3></a>
+								</td>
+								<td><a href="${contextPath}/member/logout.do"><h3>로그아웃</h3></a>
+								</td>
+							</c:otherwise>
+						</c:choose> 
 						
 					</c:when>
 

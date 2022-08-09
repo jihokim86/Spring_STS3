@@ -16,4 +16,10 @@ public interface MemberService {
 	
 	//회원가입 메소드
 	public int addMember(MemberVO memberVO) throws DataAccessException;
+	
+	//회원수정 메소드
+	public void modMember(MemberVO memberVO) throws DataAccessException;
+	
+	//회원삭제 메소드
+	public int removeMember(String id) throws DataAccessException;
 }

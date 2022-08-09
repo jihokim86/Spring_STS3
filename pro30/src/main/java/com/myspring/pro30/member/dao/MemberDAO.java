@@ -22,4 +22,17 @@ public interface MemberDAO {
 	 //2. 입력 파라미터들을 넘겨줘야한다~ MemberVO memberVO 형식으로
 	 //3. 리턴 값은?? => sqlsession의 insert는 int 타입으로 정해져 있음.
 	 public int insertMember(MemberVO memberVO) throws DataAccessException;
+	 
+	 
+	 //회원수정 메소드 필요사항
+	 //1. 쿼리문에 update t_member set pwd=#{pwd}..where id=#{id}
+	 //2. 입력파라미터가 필요하므로 MemberVO memberVO를 넘겨줘야한다.
+	 //3. 리턴타입은?? 없다
+	 public void updateMember(MemberVO memberVO) throws DataAccessException;
+	 
+	 //회원삭제 메소드 필요사항
+	 //1. 쿼리문에 delete from t_member where id=#{id}
+	 //2. 입력파라미터가 한개 필요하므로 String 타입으로 넘겨줘도 된다.
+	 //3. 리턴타입은? sqlSession의 delete는 int 타입이다
+	 public int deleteMember(String id) throws DataAccessException;
 }

@@ -1,5 +1,7 @@
 package com.myspring.pro30.member.controller;
 
+import java.io.InputStream;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -65,23 +67,23 @@ public class MemberControllerImpl   implements MemberController {
 		HttpSession session = request.getSession();
 		
 		//id,pwd 유효성
-		// 일치하면 1, 불일치하면 -1을 값을 가지고 main.do로 이동.
-		// 불일치시 경고창이 뜨고 로그인 창을 다시 보여줘야함.\
+		// 일치하면 1 main.do로 이동. 불일치하면 -1을 가지고 /member/loginForm.do로 이동.
+		// 불일치시 경고창이 뜨고 로그인 창을 다시 보여줘야함.
 		// 일치시 main 창을 보여주면 됨.
 		if(mVO != null) {
-			System.out.println("1");
+			System.out.println("로그인성공");
 			session.setAttribute("memberVO", mVO);
 			session.setAttribute("login", 1);
 			mav.setViewName("redirect:/main.do");
 		
 		//mVO가 null값을 가지면 login값은 false 로 전달
 		}else {
-			System.out.println("-1");
+			System.out.println("로그인실패");
 			session.setAttribute("login", -1);
 			mav.setViewName("redirect:/member/loginForm.do"); 
 
 			// redirect가 없는상황이라면 {contextPath}/WEB-INF/views//member/loginForm.do
-			// redirect가 있는상황이라면 {contextPath}//member/loginForm.do
+			// redirect가 있는상황이라면 {contextPath}/member/loginForm.do
 		}
 		return mav;
 	}
@@ -100,7 +102,6 @@ public class MemberControllerImpl   implements MemberController {
 	public ModelAndView main(HttpServletRequest request,HttpServletResponse respons) throws Exception{
 		String veiwName = (String) request.getAttribute("veiwName");
 		ModelAndView mav = new ModelAndView(veiwName);
-		System.out.println(veiwName);
 		return mav;
 	}
 	
@@ -110,6 +111,7 @@ public class MemberControllerImpl   implements MemberController {
 		ModelAndView mav = new ModelAndView();
 		HttpSession session = request.getSession();
 		session.removeAttribute("login");
+		session.removeAttribute("memberVO");
 		mav.setViewName("redirect:/main.do");
 		return mav;
 	}
@@ -137,4 +139,35 @@ public class MemberControllerImpl   implements MemberController {
 		return mav;
 	}
 	
+	//회원수정 폼 이동 컨트롤러
+	@RequestMapping(value="/member/modForm.do", method=RequestMethod.GET)
+	public ModelAndView modForm(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		String viewName = (String) request.getAttribute("viewName");
+		ModelAndView mav = new ModelAndView(viewName);
+		HttpSession session = request.getSession();
+		MemberVO mVO = (MemberVO) session.getAttribute("memberVO");
+		mav.addObject("mVO", mVO);
+		return mav;
+	}
+	
+	//회원수정 컨트롤러
+	@RequestMapping(value="/member/modMember.do",method=RequestMethod.POST)
+	public ModelAndView modMember(@ModelAttribute("memberVO") MemberVO memberVO, HttpServletRequest request, HttpServletResponse reponse) throws Exception{
+		ModelAndView mav = new ModelAndView();
+		memberService.modMember(memberVO);
+		HttpSession session = request.getSession();
+		session.setAttribute("memberVO", memberVO);
+		mav.setViewName("redirect:/main.do");
+		return mav;
+	}
+
+	//회원삭제 컨트롤러
+	@Override
+	@RequestMapping(value="/member/removeMember.do",method=RequestMethod.GET)
+	public ModelAndView removeMember(@RequestParam("id") String id, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		int result = memberService.removeMember(id);
+		mav.setViewName("redirect:/member/listMembers.do");
+		return mav;
+	}
 }
