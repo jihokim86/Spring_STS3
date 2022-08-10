@@ -9,5 +9,11 @@
 		<put-attribute name="body"
 			value="/WEB-INF/views/news/main.jsp" />
 	</definition>
+	
+	<definition name="/news/addNewsForm" extends="baseLayout">
+		<put-attribute name="title" value="글쓰기form" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/news/addNewsForm.jsp" />
+	</definition>
 
 </tiles-definitions>

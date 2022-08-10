@@ -8,6 +8,7 @@
    		<result property="newsNo" column="newsNo"/>
    		<result property="newsTitle" column="newsTitle"/>
    		<result property="newsContent" column="newsContent"/>
+   		<result property="imageFileName" column="imageFileName"/>
    		<result property="newsWriteDate" column="newsWriteDate"/>
    	</resultMap>
    	
@@ -16,4 +17,19 @@
    			select * from news
    		]]>
    	</select>
+   		
+   	<insert id="insertNews" parameterType="java.util.Map">
+   		<![CDATA[
+   			insert into news
+   			values(#{newsNo},#{newsTitle},'주호','김지호',sysdate)
+   		]]>
+   	</insert>
+   	
+ 
+    <select id="selectMaxNewsNo" resultType="int">
+    	<![CDATA[
+    		select Max(newsNo)+1 from news
+    	]]>
+    </select>
+    
    </mapper>

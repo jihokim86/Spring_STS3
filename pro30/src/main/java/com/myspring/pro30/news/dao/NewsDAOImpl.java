@@ -1,6 +1,7 @@
 package com.myspring.pro30.news.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,4 +20,17 @@ public class NewsDAOImpl implements NewsDAO{
 		return newsList;
 	}
 
+	@Override
+	public int insertNews(Map newsMap) throws DataAccessException {
+		int newsNo = selectMaxNewsNo();
+		newsMap.put("newsNo", newsNo);
+		int result = sqlSession.insert("mapper.news.insertNews",newsMap);
+		return newsNo;
+	}
+	
+	private int selectMaxNewsNo() throws DataAccessException{
+		return sqlSession.selectOne("mapper.news.selectMaxNewsNo");
+	}
+
+	
 }
