@@ -7,6 +7,7 @@
 request.setCharacterEncoding("UTF-8");
 %>
 
+<c:set var="imageFileName"  value="${newsMap.fileList}"  /> 
 
 <!DOCTYPE html>
 <html>
@@ -27,13 +28,13 @@ request.setCharacterEncoding("UTF-8");
 			<div style="display: table-cell;">
 				<a href="${contextPath}/news/addNewsForm.do">글쓰기(관리지만)</a> 
 			</div>
-			
 		</div>
 		<c:forEach var="listNews" items="${listNews }">
+		 	
 			<div style="height: auto; width: 100%; border: 1px solid red;">
 
-				<div style="height: auto; width: 200px; border: 1px solid red; display: table-cell">
-					<a href="#">뉴스사진</a>
+				<div style="height: auto; width: 100px; border: 1px solid red; display: table-cell">
+					<img src="${contextPath}/download.do?newsNo=${newsMap.newsNo}&imageFileName=${newsMap.imageFileName}" id="preview" />
 				</div>
 
 				<div style="height: auto; border: 1px solid red; display: table-cell; vertical-align: middle;">

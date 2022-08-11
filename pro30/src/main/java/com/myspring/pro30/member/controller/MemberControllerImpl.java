@@ -74,7 +74,7 @@ public class MemberControllerImpl   implements MemberController {
 			System.out.println("로그인성공");
 			session.setAttribute("memberVO", mVO);
 			session.setAttribute("login", 1);
-			mav.setViewName("redirect:/main.do");
+			mav.setViewName("redirect:/news/main.do");
 		
 		//mVO가 null값을 가지면 login값은 false 로 전달
 		}else {

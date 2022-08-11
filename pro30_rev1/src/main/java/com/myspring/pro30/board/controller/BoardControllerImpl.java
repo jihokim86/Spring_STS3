@@ -386,7 +386,7 @@ public class BoardControllerImpl  implements BoardController{
 		  for(ImageVO  imageVO:imageFileList) {
 		  	imageFileName = imageVO.getImageFileName();
 			File srcFile = new File(ARTICLE_IMAGE_REPO+"\\"+"temp"+"\\"+imageFileName);
-		 	srcFile.delete();
+		 	srcFile.delete();       //C:\\board\\article_image";
 		  }
 		}
 
@@ -482,6 +482,7 @@ public class BoardControllerImpl  implements BoardController{
 			
 			File file = new File(ARTICLE_IMAGE_REPO +"\\"+"temp"+"\\" + fileName); // 이미지 저장 경로지정?????
 			
+			//아래 주석처리하면 오류 발생함..
 			if(mFile.getSize()!=0){ //File Null Check
 				
 				if(!file.exists()){ //경로상에 파일이 존재하지 않을 경우

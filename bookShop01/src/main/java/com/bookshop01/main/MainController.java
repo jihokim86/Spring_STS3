@@ -38,3 +38,5 @@ public class MainController extends BaseController {
 		return mav;
 	}
 }
+
+//c:forEach var="item" items="${goodsMap.bestseller }">

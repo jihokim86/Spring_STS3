@@ -21,7 +21,7 @@
    	<insert id="insertNews" parameterType="java.util.Map">
    		<![CDATA[
    			insert into news
-   			values(#{newsNo},#{newsTitle},'주호','김지호',sysdate)
+   			values(#{newsNo},#{newsTitle},#{newsContent},'이미지이름',sysdate)
    		]]>
    	</insert>
    	

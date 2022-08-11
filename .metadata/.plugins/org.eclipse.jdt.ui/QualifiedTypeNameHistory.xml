@@ -10,7 +10,6 @@
     <fullyQualifiedTypeName name="com.myspring.pro30.board.dao.BoardDAO"/>
     <fullyQualifiedTypeName name="org.springframework.context.annotation.Conditional"/>
     <fullyQualifiedTypeName name="com.myspring.pro30.board.service.BoardService"/>
-    <fullyQualifiedTypeName name="org.springframework.stereotype.Component"/>
     <fullyQualifiedTypeName name="org.springframework.transaction.annotation.Transactional"/>
     <fullyQualifiedTypeName name="com.myspring.myproject.member.dao.MemberDAO"/>
     <fullyQualifiedTypeName name="com.myspring.myproject.member.service.MemberService"/>
@@ -22,7 +21,6 @@
     <fullyQualifiedTypeName name="com.myspring.pro30.member.service.MemberService"/>
     <fullyQualifiedTypeName name="javax.servlet.http.HttpSession"/>
     <fullyQualifiedTypeName name="java.io.InputStream"/>
-    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.ModelAttribute"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestParam"/>
     <fullyQualifiedTypeName name="com.myspring.pro30.board.controller.BoardController"/>
     <fullyQualifiedTypeName name="org.springframework.stereotype.Controller"/>
@@ -32,11 +30,9 @@
     <fullyQualifiedTypeName name="com.myspring.pro30.news.service.NewsService"/>
     <fullyQualifiedTypeName name="org.springframework.stereotype.Service"/>
     <fullyQualifiedTypeName name="com.myspring.pro30.news.dao.NewsDAO"/>
-    <fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Autowired"/>
     <fullyQualifiedTypeName name="javax.servlet.http.HttpServletRequest"/>
     <fullyQualifiedTypeName name="org.springframework.http.ResponseEntity"/>
     <fullyQualifiedTypeName name="javax.servlet.http.HttpServletResponse"/>
-    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestMethod"/>
     <fullyQualifiedTypeName name="org.springframework.dao.DataAccessException"/>
     <fullyQualifiedTypeName name="org.springframework.web.multipart.MultipartHttpServletRequest"/>
     <fullyQualifiedTypeName name="java.lang.Exception"/>
@@ -44,5 +40,17 @@
     <fullyQualifiedTypeName name="java.util.ArrayList"/>
     <fullyQualifiedTypeName name="org.springframework.ui.Model"/>
     <fullyQualifiedTypeName name="org.springframework.web.servlet.ModelAndView"/>
+    <fullyQualifiedTypeName name="lombok.Data"/>
+    <fullyQualifiedTypeName name="org.zerock.sample.Restaurant"/>
+    <fullyQualifiedTypeName name="lombok.extern.log4j.Log4j"/>
+    <fullyQualifiedTypeName name="org.springframework.stereotype.Component"/>
+    <fullyQualifiedTypeName name="lombok.ToString"/>
+    <fullyQualifiedTypeName name="lombok.Getter"/>
+    <fullyQualifiedTypeName name="org.junit.runner.RunWith"/>
+    <fullyQualifiedTypeName name="org.junit.Test"/>
+    <fullyQualifiedTypeName name="lombok.Setter"/>
+    <fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Autowired"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.ModelAttribute"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestMapping"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestMethod"/>
 </qualifiedTypeNameHistroy>

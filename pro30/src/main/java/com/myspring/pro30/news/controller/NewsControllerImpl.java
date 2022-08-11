@@ -11,17 +11,18 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.myspring.pro30.news.service.NewsService;
+import com.myspring.pro30.news.vo.NewsVO;
 
 @Controller("boardController")
 public class NewsControllerImpl implements NewsController {
@@ -31,13 +32,16 @@ public class NewsControllerImpl implements NewsController {
 	
 	
 	//뉴스 목록 메인 컨트롤러
+	
 	@Override
-	@RequestMapping(value ="/news/main.do", method =RequestMethod.GET)
-	public ModelAndView boardMain(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	@RequestMapping(value="/news/main.do", method=RequestMethod.GET)
+	public ModelAndView boardMain(@RequestParam Map newsMap, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
 		String viewName = (String)request.getAttribute("viewName");
 		ModelAndView mav = new ModelAndView(viewName); 
 		List listNews = newsService.listNews();
 		mav.addObject("listNews", listNews); 
+		mav.addObject("newsMap", newsMap);
 		return mav;
 	}
 
@@ -82,7 +86,7 @@ public class NewsControllerImpl implements NewsController {
 		
 		List<String> fileList = upload(multipartRequest);
 		
-		newsMap.put("fileList", fileList);
+		
 		
 		//insert쿼리 실행
 		int newsNo = newsService.addNews(newsMap);
@@ -93,7 +97,32 @@ public class NewsControllerImpl implements NewsController {
 		System.out.println(newsMap.get("newsContent"));
 		System.out.println(newsMap.get("fileList"));
 		
+		//이미지 파일 경로 설정
+		String imageFileName=null;
+		for(String FileName : fileList) {
+			NewsVO nVO = new NewsVO();
+			nVO.setImageFileName(FileName);
+			imageFileName = nVO.getImageFileName();
+		}
+		
+		System.out.println("imageFileName:"+imageFileName);
+		
+		newsMap.put("imageFileName", imageFileName); //다중 이미지 일때는 이거 위치 변경이 필요하고. main.jsp에서 호출할때가 문제임.
+		
+		File srcFile = new File("C:\\article\\news_image\\"+"temp"+"\\"+imageFileName);
+		
+		// imageFileName=duke.png
+		// 디렉토리 경로
+		//ARTICLE_IMAGE_REPO = "C:\\board\\article_image";
+		
+		File destDir = new File("C:\\article\\news_image\\"+newsNo);
+		
+		//destDir.mkdirs();
+		FileUtils.moveFileToDirectory(srcFile, destDir,true); //경로 변경
+		
+		
 		ModelAndView mav = new ModelAndView();
+		mav.addAllObjects(newsMap);
 		mav.setViewName("redirect:/news/main.do");
 		return mav;
 	}
@@ -106,35 +135,28 @@ public class NewsControllerImpl implements NewsController {
 		List fileList = new ArrayList();
 		
 		// 폼의 태그 중 file타입의 태그의 name을 추출하여 저장.
-		Iterator fileNames = multipartRequest.getFileNames(); 
-		//<input type="file" name="imageFileName" onchange="readURL(this)"/>//
+		Iterator<String> fileNames = multipartRequest.getFileNames(); 			//<input type="file" name="imageFileName" onchange="readURL(this)"/>//
 		
 		while(fileNames.hasNext()) {
-			String fileName = (String) fileNames.next(); //각 요소의 값(name)을 저장
+			String fileName = fileNames.next(); 				//각 요소의 값(name)을 저장
+			MultipartFile mFile = multipartRequest.getFile(fileName);	//추출된 태그의 이름을 가지고 파일을 객체에 저장해야한다.
+			String originalFilename= mFile.getOriginalFilename();		//mFile객체에 저장된 파일의 실체이름을 추출
+			fileList.add(originalFilename); 							//파일이름들을 리스트에 저장
 			
-			//추출된 태그의 이름을 가지고 파일을 객체에 저장해야한다.
-			MultipartFile mFile = multipartRequest.getFile(fileName);
-			
-			//mFile객체에 저장된 파일의 실체이름을 추출
-			String OriginalFilename= mFile.getOriginalFilename();
-			
-			fileList.add(OriginalFilename); //파일이름들을 리스트에 저장
 			
 			//객체에 저장된 파일을 실제 저장할 경로를 지정
-			File file = new File("C:\\board\\article_image\\"+fileName);
-			if(mFile.getSize() !=0) {
-				if(! file.exists()) {
-					if(file.getParentFile().mkdirs()) {
-						file.createNewFile();
-					}
+			File file = new File("C:\\article\\news_image\\"+"temp"+"\\"+fileName);
+			
+			if(mFile.getSize()!=0){ //File Null Check
+				if(!file.exists()){ //경로상에 파일이 존재하지 않을 경우
+					file.getParentFile().mkdirs();  //경로에 해당하는 디렉토리들을 생성
+					mFile.transferTo(new File("C:\\article\\news_image\\"+"temp"+"\\"+originalFilename)); //임시로 저장된 multipartFile을 실제 파일로 전송
 				}
-				mFile.transferTo(new File("C:\\board\\article_image\\"+"temp"+ "\\"+OriginalFilename)); 
-				//임시로 저장된 multipartFile을 실제 파일로 전송
 			}
 		}
-	return fileList;
+		return fileList;
+	}
+
+
 }
 	
-
-
-}
