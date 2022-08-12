@@ -35,14 +35,19 @@ public class NewsControllerImpl implements NewsController {
 	
 	@Override
 	@RequestMapping(value="/news/main.do", method=RequestMethod.GET)
-	public ModelAndView boardMain(@RequestParam Map newsMap, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
+	public ModelAndView boardMain(HttpServletRequest request,HttpServletResponse response) throws Exception {
 		String viewName = (String)request.getAttribute("viewName");
 		ModelAndView mav = new ModelAndView(viewName); 
 		List listNews = newsService.listNews();
 		mav.addObject("listNews", listNews); 
-		mav.addObject("newsMap", newsMap);
+		
 		return mav;
+	}
+	
+	//쿼리스트링 숨기기 위한 컨트롤러
+	@RequestMapping(value="/getMainView.do")
+	public String getMainView() {
+		return "redirect:/news/main.do";
 	}
 
 	//뉴스 글쓰기 폼 컨트롤러
@@ -87,15 +92,11 @@ public class NewsControllerImpl implements NewsController {
 		List<String> fileList = upload(multipartRequest);
 		
 		
-		
-		//insert쿼리 실행
-		int newsNo = newsService.addNews(newsMap);
-		
-		System.out.println(newsMap.get("name"));
-		System.out.println(newsMap.get("newsNo"));
-		System.out.println(newsMap.get("newsTitle"));
-		System.out.println(newsMap.get("newsContent"));
-		System.out.println(newsMap.get("fileList"));
+		System.out.println("add_name="+newsMap.get("name"));
+		System.out.println("add_newsNo="+newsMap.get("newsNo"));
+		System.out.println("add_newsTitle="+newsMap.get("newsTitle"));
+		System.out.println("add_newsContent="+newsMap.get("newsContent"));
+		System.out.println("add_fileList="+newsMap.get("fileList"));
 		
 		//이미지 파일 경로 설정
 		String imageFileName=null;
@@ -107,7 +108,10 @@ public class NewsControllerImpl implements NewsController {
 		
 		System.out.println("imageFileName:"+imageFileName);
 		
-		newsMap.put("imageFileName", imageFileName); //다중 이미지 일때는 이거 위치 변경이 필요하고. main.jsp에서 호출할때가 문제임.
+		newsMap.put("imageFileName", imageFileName); 
+		
+		//insert쿼리 실행
+		int newsNo = newsService.addNews(newsMap);
 		
 		File srcFile = new File("C:\\article\\news_image\\"+"temp"+"\\"+imageFileName);
 		
@@ -123,7 +127,7 @@ public class NewsControllerImpl implements NewsController {
 		
 		ModelAndView mav = new ModelAndView();
 		mav.addAllObjects(newsMap);
-		mav.setViewName("redirect:/news/main.do");
+		mav.setViewName("redirect:/getMainView.do");
 		return mav;
 	}
 
@@ -157,6 +161,18 @@ public class NewsControllerImpl implements NewsController {
 		return fileList;
 	}
 
-
+	//뉴스 상세보기 컨트롤러
+	@Override
+	@RequestMapping(value="/news/viewNews.do", method=RequestMethod.GET)
+	public ModelAndView viewNews(@RequestParam("newsNo") int newsNo, @RequestParam("name") String name,HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String viewName = (String) request.getAttribute("viewName");
+		ModelAndView mav = new ModelAndView(viewName);
+		NewsVO listNews = newsService.viewNews(newsNo);
+		List listNewsName = newsService.viewNewsName(name);
+		mav.addObject("listNews", listNews);
+		mav.addObject("listNewsName",listNewsName);
+		return mav;
+	}
+	
 }
 	

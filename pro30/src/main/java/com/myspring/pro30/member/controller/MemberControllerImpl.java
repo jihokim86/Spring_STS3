@@ -112,7 +112,7 @@ public class MemberControllerImpl   implements MemberController {
 		HttpSession session = request.getSession();
 		session.removeAttribute("login");
 		session.removeAttribute("memberVO");
-		mav.setViewName("redirect:/main.do");
+		mav.setViewName("redirect:/news/main.do");
 		return mav;
 	}
 

@@ -9,27 +9,47 @@
    		<result property="newsTitle" column="newsTitle"/>
    		<result property="newsContent" column="newsContent"/>
    		<result property="imageFileName" column="imageFileName"/>
+   		<result property="name" column="name"/>
    		<result property="newsWriteDate" column="newsWriteDate"/>
    	</resultMap>
    	
+   	<!--뉴스 목록-->
    	<select id="selectNewsList" resultMap="newsResult">
    		<![CDATA[
    			select * from news
    		]]>
    	</select>
-   		
+   	
+   	<!-- 뉴스 등록 -->
    	<insert id="insertNews" parameterType="java.util.Map">
    		<![CDATA[
    			insert into news
-   			values(#{newsNo},#{newsTitle},#{newsContent},'이미지이름',sysdate)
+   			values(#{newsNo},#{newsTitle},#{newsContent},#{imageFileName},#{name},sysdate)
    		]]>
    	</insert>
    	
- 
+ 	<!-- 등록된 뉴스 Max NO  -->
     <select id="selectMaxNewsNo" resultType="int">
     	<![CDATA[
-    		select Max(newsNo)+1 from news
+    		select NVL(Max(newsNo),0)+1 from news
     	]]>
     </select>
+    
+    <!-- 뉴스 상세 보기 -->
+     <select id="selectViewNews" resultType="newsVO" parameterType="int">
+    	<![CDATA[
+    		select * from news 
+    		where newsNo=#{newsNo}
+    	]]>
+    </select>
+    
+     <!-- 작성자 마다 뉴스 추출 -->
+     
+     <select id="selectNewsName" resultMap="newsResult" parameterType="String">
+    	<![CDATA[
+    		select * from news 
+    		where name=#{name}
+    	]]>
+    </select> 
     
    </mapper>

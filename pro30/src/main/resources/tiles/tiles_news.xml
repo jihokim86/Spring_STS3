@@ -15,5 +15,11 @@
 		<put-attribute name="body"
 			value="/WEB-INF/views/news/addNewsForm.jsp" />
 	</definition>
+	
+		<definition name="/news/viewNews" extends="baseLayout">
+		<put-attribute name="title" value="글상세보기" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/news/viewNews.jsp" />
+	</definition>
 
 </tiles-definitions>

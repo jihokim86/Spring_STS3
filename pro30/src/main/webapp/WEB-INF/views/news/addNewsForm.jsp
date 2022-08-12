@@ -23,7 +23,7 @@
 
 	<tr>
 		<td>작성자</td>
-		<td><input type="text" id="" name="name" /></td>
+		<td><input type="text" id="" name="name" value="${memberVO.name}" /></td>
 	</tr>
 	
 	<tr>

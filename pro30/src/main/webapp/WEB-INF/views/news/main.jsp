@@ -7,8 +7,6 @@
 request.setCharacterEncoding("UTF-8");
 %>
 
-<c:set var="imageFileName"  value="${newsMap.fileList}"  /> 
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,11 +32,15 @@ request.setCharacterEncoding("UTF-8");
 			<div style="height: auto; width: 100%; border: 1px solid red;">
 
 				<div style="height: auto; width: 100px; border: 1px solid red; display: table-cell">
-					<img src="${contextPath}/download.do?newsNo=${newsMap.newsNo}&imageFileName=${newsMap.imageFileName}" id="preview" />
+				<a href="${contextPath}/news/viewNews.do?newsNo=${listNews.newsNo}&name=${listNews.name}">
+					<img src="${contextPath}/download.do?newsNo=${listNews.newsNo}&imageFileName=${listNews.imageFileName}" id="preview" width="100px"/>
+				</a>
 				</div>
 
 				<div style="height: auto; border: 1px solid red; display: table-cell; vertical-align: middle;">
-					<a href="#">${listNews.newsTitle }</a>
+					<a href="${contextPath}/news/viewNews.do?newsNo=${listNews.newsNo}&name=${listNews.name}">
+					<span>${listNews.newsTitle }</span>
+					</a>
 
 					<div style="height: auto; border: 1px solid red; display: table-cell; vertical-align: middle;">
 						<a>${listNews.newsContent }</a>

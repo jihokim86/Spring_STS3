@@ -14,7 +14,7 @@
 <title>회원가입창</title>
 </head>
 <body>
-<form method="post" action="${contextPath}/member/addMember.do">
+<form  method="post" action="${contextPath}/member/addMember.do">
 	<h1>회원가입</h1>
 		<table>
 			<tr>

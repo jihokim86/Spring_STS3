@@ -21,7 +21,7 @@
 		<tr>
 
 			<td>
-				<a href="${contextPath}/main.do"> 
+				<a href="${contextPath}/news/main.do"> 
 				<img src="${contextPath}/resources/image/duke_swing.gif" />
 				</a>
 			</td>

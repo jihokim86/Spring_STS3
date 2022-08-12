@@ -8,6 +8,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.myspring.pro30.news.dao.NewsDAO;
+import com.myspring.pro30.news.vo.NewsVO;
 
 @Service("newsService")
 public class NewsServiceImpl implements NewsService{
@@ -25,6 +26,18 @@ public class NewsServiceImpl implements NewsService{
 	public int addNews(Map newsMap) throws DataAccessException {
 		int result = newsDAO.insertNews(newsMap);
 		return result;
+	}
+
+	@Override
+	public NewsVO viewNews(int newsNo) throws DataAccessException {
+		NewsVO viewNews = newsDAO.selectViewNews(newsNo);
+		return viewNews;
+	}
+
+	@Override
+	public List viewNewsName(String name) throws DataAccessException {
+		List viewNewsName = newsDAO.selectNewsName(name);
+		return viewNewsName;
 	}
 	
 	
