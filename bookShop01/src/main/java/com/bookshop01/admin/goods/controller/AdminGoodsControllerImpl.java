@@ -1,7 +1,7 @@
 package com.bookshop01.admin.goods.controller;
 
 import java.io.File;
-import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +17,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,51 +37,121 @@ public class AdminGoodsControllerImpl extends BaseController  implements AdminGo
 	@Autowired
 	AdminGoodsService adminGoodsService;
 	
+	
+	//관리자 로그인 후 header.jsp에관리자버튼 생성되고 관리자 버튼 클릭시  
+	//${contextPath}/admin/goods/adminGoodsMain.do으로 경로지정 되어 있음.
+	//1. 상품조회 창이 나타남.
+	//2. 상품등록하기 버튼이 있음.
+	
 	@RequestMapping(value="/adminGoodsMain.do" ,method={RequestMethod.POST,RequestMethod.GET})
 	public ModelAndView adminGoodsMain(@RequestParam Map<String, String> dateMap,
+									   @RequestParam(value="search_condition", required = false) String search_condition,
+									   @RequestParam(value="search",required = false) String search,
 			                           HttpServletRequest request, HttpServletResponse response)  throws Exception {
+		//dateMap을 전달받음
+		//1. adminGoodsMain.jsp에서 자바스크립트에서 <input type="??" name="fixedSearchPeriod" value="fixeSearchPeriod" /> value값을 얻는다.
+		//2. 
+		
+		//getViewName을 통해 url 추출(adminGoodsMain.jsp로 이동시키기 위한 작업)
 		String viewName=(String)request.getAttribute("viewName");
 		ModelAndView mav = new ModelAndView(viewName);
 		HttpSession session=request.getSession();
 		session=request.getSession();
-		session.setAttribute("side_menu", "admin_mode"); //���������� ���̵� �޴��� �����Ѵ�.
 		
-		String fixedSearchPeriod = dateMap.get("fixedSearchPeriod");
+		session.setAttribute("side_menu", "admin_mode"); //무엇을 위한 값 저장인가?
+		
+		
 		String section = dateMap.get("section");
 		String pageNum = dateMap.get("pageNum");
-		String beginDate=null,endDate=null;
+		String beginYear=dateMap.get("beginYear");
+		String beginMonth=dateMap.get("beginMonth");
+		String beginDay=dateMap.get("beginDay");
 		
-		String [] tempDate=calcSearchPeriod(fixedSearchPeriod).split(",");
-		beginDate=tempDate[0];
-		endDate=tempDate[1];
+		if(beginYear ==null) {
+			beginYear = "2018";
+			beginMonth = "01";
+			beginDay = "01";
+		}
+		
+		
+		
+		String beginDate = beginYear +"-"+ beginMonth +"-"+beginDay;
+		String endDate=calcSearchPeriod();
+		
+		//dataMap으로 넘겨받은 값 출력하기
+		
+		System.out.println("section="+section); //null
+		System.out.println("pageNum="+pageNum);	//null
+		 
+		
+		System.out.println("beginDate="+beginDate); // 2022-04-16
+		System.out.println("endDate="+endDate);		// 2022-08-16
+		
+		//dateMap에 저장 왜 저장하니?? 어디에 사용????????
 		dateMap.put("beginDate", beginDate);
 		dateMap.put("endDate", endDate);
 		
+		
+		// 쿼리문에 파라미터 전달하기 위한 hashMap객체 생성
 		Map<String,Object> condMap=new HashMap<String,Object>();
+		
 		if(section== null) {
 			section = "1";
 		}
 		condMap.put("section",section);
+		
+		
 		if(pageNum== null) {
 			pageNum = "1";
 		}
+		
+	
+		if(search_condition == "goods_id") {
+			int search1 = Integer.parseInt(search);
+			condMap.put("search", search1);
+		}
+		
+		if(search_condition == "goods_title") {
+			String search2 = search;
+			condMap.put("search", search2);
+		}
+		
+		if(search_condition == "goods_publisher") {
+			String search3 = search;
+			condMap.put("search", search3);
+		}
+		
+		
 		condMap.put("pageNum",pageNum);
 		condMap.put("beginDate",beginDate);
 		condMap.put("endDate", endDate);
+		condMap.put("search_condition", search_condition);
+		condMap.put("search", search);
+		
+
+//----------------------쿼리문 실행 -----------------------------------------------------------------------------------------------//
+		//listNewGoods(condMap)함수는 
+		//to_char(goods_creDate,'YYYY-MM-DD')  between #{beginDate} and #{endDate} 기간에서
+		//recNum between (#{section}-1)*100+ (#{pageNum}-1)*10+1 and (#{section}-1)*100+(#{pageNum})*10 페이지이지 내에서
+		//글 목록~
 		List<GoodsVO> newGoodsList=adminGoodsService.listNewGoods(condMap);
-		mav.addObject("newGoodsList", newGoodsList);
+		mav.addObject("newGoodsList", newGoodsList); // jsp에서 뿌려줘야하기때문에 저장
 		
-		String beginDate1[]=beginDate.split("-");
+		
+//-----------------조회기간을 월/달/일로 나누어 저장하여 jsp에 전달---------------------------------------------//
+		String beginDate1[]=beginDate.split("-"); 	
 		String endDate2[]=endDate.split("-");
-		mav.addObject("beginYear",beginDate1[0]);
-		mav.addObject("beginMonth",beginDate1[1]);
-		mav.addObject("beginDay",beginDate1[2]);
-		mav.addObject("endYear",endDate2[0]);
-		mav.addObject("endMonth",endDate2[1]);
-		mav.addObject("endDay",endDate2[2]);
 		
-		mav.addObject("section", section);
-		mav.addObject("pageNum", pageNum);
+		mav.addObject("beginYear",beginDate1[0]);	
+		mav.addObject("beginMonth",beginDate1[1]);	
+		mav.addObject("beginDay",beginDate1[2]);	
+		mav.addObject("endYear",endDate2[0]);		
+		mav.addObject("endMonth",endDate2[1]);		
+		mav.addObject("endDay",endDate2[2]);
+		mav.addObject("search", search);
+		
+		mav.addObject("section", section);			// section = 1 String타입이다.
+		mav.addObject("pageNum", pageNum);			// pageNum = 1 String타입이다.
 		return mav;
 		
 	}
@@ -129,7 +200,7 @@ public class AdminGoodsControllerImpl extends BaseController  implements AdminGo
 				}
 			}
 			message= "<script>";
-			message += " alert('����ǰ�� �߰��߽��ϴ�.');";
+			message += " alert('����ǰ�� �߰��߽��ϴ�.');";
 			message +=" location.href='"+multipartRequest.getContextPath()+"/admin/goods/addNewGoodsForm.do';";
 			message +=("</script>");
 		}catch(Exception e) {
@@ -142,7 +213,7 @@ public class AdminGoodsControllerImpl extends BaseController  implements AdminGo
 			}
 			
 			message= "<script>";
-			message += " alert('������ �߻��߽��ϴ�. �ٽ� �õ��� �ּ���');";
+			message += " alert('������ �߻��߽��ϴ�. �ٽ� �õ��� �ּ���');";
 			message +=" location.href='"+multipartRequest.getContextPath()+"/admin/goods/addNewGoodsForm.do';";
 			message +=("</script>");
 			e.printStackTrace();
@@ -306,5 +377,8 @@ public class AdminGoodsControllerImpl extends BaseController  implements AdminGo
 			e.printStackTrace();
 		}
 	}
+
+
+
 
 }

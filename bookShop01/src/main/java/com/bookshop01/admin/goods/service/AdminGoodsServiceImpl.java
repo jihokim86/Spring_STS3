@@ -37,10 +37,14 @@ public class AdminGoodsServiceImpl implements AdminGoodsService {
 		return goods_id;
 	}
 	
+	//상품조회를 위한 쿼리문
+	//condMap에는 session, pageNum, beginDate, endDate 값이 들어있다.
 	@Override
 	public List<GoodsVO> listNewGoods(Map condMap) throws Exception{
 		return adminGoodsDAO.selectNewGoodsList(condMap);
 	}
+	
+	
 	@Override
 	public Map goodsDetail(int goods_id) throws Exception {
 		Map goodsMap = new HashMap();

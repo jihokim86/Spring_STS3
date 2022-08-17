@@ -11,7 +11,11 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 public interface AdminGoodsController {
-	public ModelAndView adminGoodsMain(@RequestParam Map<String, String> dateMap,HttpServletRequest request, HttpServletResponse response)  throws Exception;
+	public ModelAndView adminGoodsMain(@RequestParam Map<String, String> dateMap,
+										@RequestParam(value="search_condition",required = false) String search_condition,
+										@RequestParam(value="search",required = false) String search,
+										HttpServletRequest request, HttpServletResponse response)  throws Exception;
+	
 	public ResponseEntity addNewGoods(MultipartHttpServletRequest multipartRequest, HttpServletResponse response)  throws Exception;
 	public ResponseEntity modifyGoodsInfo( @RequestParam("goods_id") String goods_id,
                                  @RequestParam("mod_type") String mod_type,

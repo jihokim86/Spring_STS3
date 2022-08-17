@@ -31,7 +31,9 @@ public class AdminGoodsDAOImpl  implements AdminGoodsDAO{
 			sqlSession.insert("mapper.admin.goods.insertGoodsImageFile",imageFileVO);
 		}
 	}
-		
+	
+	
+	//상품조회를 위한 쿼리문
 	@Override
 	public List<GoodsVO>selectNewGoodsList(Map condMap) throws DataAccessException {
 		ArrayList<GoodsVO>  goodsList=(ArrayList)sqlSession.selectList("mapper.admin.goods.selectNewGoodsList",condMap);

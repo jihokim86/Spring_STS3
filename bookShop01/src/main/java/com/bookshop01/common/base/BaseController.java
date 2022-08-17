@@ -41,12 +41,12 @@ public abstract class BaseController  {
 			
 			File file = new File(CURR_IMAGE_REPO_PATH +"\\"+ fileName);
 			if(mFile.getSize()!=0){ //File Null Check
-				if(! file.exists()){ //°æ·Î»ó¿¡ ÆÄÀÏÀÌ Á¸ÀçÇÏÁö ¾ÊÀ» °æ¿ì
-					if(file.getParentFile().mkdirs()){ //°æ·Î¿¡ ÇØ´çÇÏ´Â µğ·ºÅä¸®µéÀ» »ı¼º
-							file.createNewFile(); //ÀÌÈÄ ÆÄÀÏ »ı¼º
+				if(! file.exists()){ //ï¿½ï¿½Î»ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+					if(file.getParentFile().mkdirs()){ //ï¿½ï¿½Î¿ï¿½ ï¿½Ø´ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ä¸®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+							file.createNewFile(); //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 					}
 				}
-				mFile.transferTo(new File(CURR_IMAGE_REPO_PATH +"\\"+"temp"+ "\\"+originalFileName)); //ÀÓ½Ã·Î ÀúÀåµÈ multipartFileÀ» ½ÇÁ¦ ÆÄÀÏ·Î Àü¼Û
+				mFile.transferTo(new File(CURR_IMAGE_REPO_PATH +"\\"+"temp"+ "\\"+originalFileName)); //ï¿½Ó½Ã·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ multipartFileï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï·ï¿½ ï¿½ï¿½ï¿½ï¿½
 			}
 		}
 		return fileList;
@@ -70,7 +70,10 @@ public abstract class BaseController  {
 	}
 	
 	
-	protected String calcSearchPeriod(String fixedSearchPeriod){
+	
+//-----------------------------ì¡°íšŒê¸°ê°„ (begin ~ end)ë¥¼ ì¶”ì¶œí•˜ê¸° ìœ„í•œ í•¨ìˆ˜------------------------------------------//
+	
+	protected String calcSearchPeriod(){
 		String beginDate=null;
 		String endDate=null;
 		String endYear=null;
@@ -79,36 +82,30 @@ public abstract class BaseController  {
 		String beginYear=null;
 		String beginMonth=null;
 		String beginDay=null;
+		
+		//ìˆ«ìí¬ë§· í´ë˜ìŠ¤
 		DecimalFormat df = new DecimalFormat("00");
+		
+		//ì‹œê°„ê³¼ ë‚ ì§œ í´ë˜ìŠ¤
 		Calendar cal=Calendar.getInstance();
 		
-		endYear   = Integer.toString(cal.get(Calendar.YEAR));
-		endMonth  = df.format(cal.get(Calendar.MONTH) + 1);
+		//ì¡°íšŒê¸°ê°„ end ë‚ ì§œ ì¶œë ¥
+		//ì•„ë˜ì™€ ê°™ì´ í˜„ì¬ ë‚ ì§œë¥¼ ì¶œë ¥í• ìˆ˜ìˆë‹¤. (1ì›”ì€ 0ì´ê¸°ë•Œë¬¸ì— +1ì„ í•´ì¤Œ)
+		endYear   = Integer.toString(cal.get(Calendar.YEAR));//Stringíƒ€ì…ìœ¼ë¡œ ì„ ì–¸ë˜ì—ˆê¸°ì— toStringí•„ìš”
+		endMonth  = df.format(cal.get(Calendar.MONTH) + 1); //df.format = ë‘ìë¦¬ìˆ˜ë¡œ í‘œí˜„í•˜ê² ë‹¤.
 		endDay   = df.format(cal.get(Calendar.DATE));
-		endDate = endYear +"-"+ endMonth +"-"+endDay;
+		endDate = endYear +"-"+ endMonth +"-"+endDay; // 2022-08-16 ìœ¼ë¡œ String íƒ€ì…ìœ¼ë¡œ ì €ì¥
 		
-		if(fixedSearchPeriod == null) {
-			cal.add(cal.MONTH,-4);
-		}else if(fixedSearchPeriod.equals("one_week")) {
-			cal.add(Calendar.DAY_OF_YEAR, -7);
-		}else if(fixedSearchPeriod.equals("two_week")) {
-			cal.add(Calendar.DAY_OF_YEAR, -14);
-		}else if(fixedSearchPeriod.equals("one_month")) {
-			cal.add(cal.MONTH,-1);
-		}else if(fixedSearchPeriod.equals("two_month")) {
-			cal.add(cal.MONTH,-2);
-		}else if(fixedSearchPeriod.equals("three_month")) {
-			cal.add(cal.MONTH,-3);
-		}else if(fixedSearchPeriod.equals("four_month")) {
-			cal.add(cal.MONTH,-4);
-		}
+
+	
+		/*
+		 * beginYear = Integer.toString(cal.get(Calendar.YEAR)); beginMonth =
+		 * df.format(cal.get(Calendar.MONTH) + 1); beginDay =
+		 * df.format(cal.get(Calendar.DATE)); beginDate = beginYear +"-"+ beginMonth
+		 * +"-"+beginDay;
+		 */
 		
-		beginYear   = Integer.toString(cal.get(Calendar.YEAR));
-		beginMonth  = df.format(cal.get(Calendar.MONTH) + 1);
-		beginDay   = df.format(cal.get(Calendar.DATE));
-		beginDate = beginYear +"-"+ beginMonth +"-"+beginDay;
-		
-		return beginDate+","+endDate;
+		return endDate;
 	}
 	
 }

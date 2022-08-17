@@ -70,6 +70,7 @@
 		
 		<result property="goods_fileName" column="goods_fileName" />
 	</resultMap>
+	
 	<insert id="insertNewGoods" parameterType="java.util.Map"   >
 		<selectKey resultType="String" keyProperty="goods_id" order="BEFORE">
 	    	select seq_goods_id.nextval from dual
@@ -121,6 +122,7 @@
 					  			      #{goods_contents_order:VARCHAR}
 					 			 )
 		]]>
+	
 	</insert> 
 		<insert id="insertGoodsImageFile" parameterType="imageFileVO"   >
 		<selectKey resultType="int" keyProperty="image_id" order="BEFORE">
@@ -139,9 +141,13 @@
 											   								 #{reg_id} )
 		]]>
 	</insert> 
+	
+	<!-- 상품 조회를 위한 쿼리문 -->
+	<!-- 매개값으로 sesson, session, pageNum, beginDate, endDate 들어 있다.-->
 	<select id="selectNewGoodsList" resultMap="goodsResult"   parameterType="java.util.Map"  >
-	    <![CDATA[
-		  select * from (
+	    
+			  select * 
+		  from (
 			   select rowNum as recNum,
 			   		  goods_id,
 			          goods_title,
@@ -151,21 +157,28 @@
 			          to_char(goods_creDate,'YYYY-MM-DD')  as goods_creDate,
 			          to_char(goods_published_date,'YYYY-MM-DD') as goods_published_date
 			       from (
-			             select  goods_id,
-			             		 goods_title,
-			             		 goods_writer,
-			             		 goods_publisher,
-			             		 goods_sales_price,
-			             		 goods_creDate,
-			             		 goods_published_date
-			              from t_shopping_goods 
-			                where  to_char(goods_creDate,'YYYY-MM-DD')  between #{beginDate} and #{endDate}
-			               order by goods_creDate desc
+                    select  *
+			              from (
+                          		select  goods_id,
+                                     goods_title,
+                                     goods_writer,
+                                     goods_publisher,
+                                     goods_sales_price,
+                                    goods_creDate,
+                                     goods_published_date
+                                from t_shopping_goods 
+                                where  to_char(goods_creDate,'YYYY-MM-DD')  between #{beginDate} and #{endDate}
+                                 order by goods_creDate desc
+                                 )
+                           <if test="search_condition==null"></if>
+                           <if test="search_condition=='all'"></if>
+                           <if test="search_condition=='goods_id'">where goods_id = #{search}</if>
+                           <if test="search_condition=='goods_title'">where goods_title = #{search}</if>
+                           <if test="search_condition=='goods_publisher'">where goods_publisher = #{search}</if>
+                           
 					    )
 				)							
-			where				
-		recNum between (#{section}-1)*100+ (#{pageNum}-1)*10+1 and (#{section}-1)*100+(#{pageNum})*10				        
-    	]]>
+			where recNum between (#{section}-1)*100+ (#{pageNum}-1)*10+1 and (#{section}-1)*100+(#{pageNum})*10				        
 	</select>
 	
 	<select id="selectOrderGoodsList" resultMap="orderGoodsResult"   parameterType="java.util.Map"  >

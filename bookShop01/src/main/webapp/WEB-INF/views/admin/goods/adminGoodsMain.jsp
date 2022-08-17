@@ -9,16 +9,27 @@
 <head>
 <meta charset="utf-8">
 <script>
+
+/* 
+ * 조회기간 설정을 위한 자바스크립트.
+ * 버튼 클릭시 해당 매개변수는
+ * today / one_week / two_week / one_month / two_month / three_month/ four_month 가 있음.
+ */
+
 function search_goods_list(fixeSearchPeriod){
-	var formObj=document.createElement("form");
-	var i_fixedSearch_period = document.createElement("input");
-	i_fixedSearch_period.name="fixedSearchPeriod";
-	i_fixedSearch_period.value=searchPeriod;
-    formObj.appendChild(i_fixedSearch_period);
-    document.body.appendChild(formObj); 
-    formObj.method="get";
-    formObj.action="${contextPath}/admin/goods/adminGoodsMain.do";
-    formObj.submit();
+	var formObj=document.createElement("form"); //<form>태그를 생성한다.
+	var i_fixedSearch_period = document.createElement("input");//<input>태그를 생성한다.
+	
+	i_fixedSearch_period.name="fixedSearchPeriod"; 	//<input> 태그의 name을 지정
+	i_fixedSearch_period.value=fixeSearchPeriod;		//<input> 태그의 value를 지정
+	//<input type="??" name="fixedSearchPeriod" value="fixeSearchPeriod" />
+    
+	formObj.appendChild(i_fixedSearch_period);	//<form>태그 내에 <input>태그를 삽입하고
+    document.body.appendChild(formObj); 		//this document에 <form>태그를 삽입한다.
+	
+    formObj.method="get";											//form태그의 method
+    formObj.action="${contextPath}/admin/goods/adminGoodsMain.do";	//form태그의 acton
+    formObj.submit();												//form태그의 submit
 }
 
 
@@ -86,21 +97,27 @@ function  calcPeriod(search_period){
 	//alert(beginDate+","+endDate);
 	return beginDate+","+endDate;
 }
+
 </script>
+
+<!-- adminGoodsMain.jsp에서 필요한 사항 
+	1. -->
 </head>
 <body>
 	<H3>상품 조회</H3>
-	<form  method="post">	
+	<form  method="post" action="${contextPath }/admin/goods/adminGoodsMain.do">	
 		<TABLE cellpadding="10" cellspacing="10"  >
 			<TBODY>
+			<!--
 				<TR >
 					<TD>
 						<input type="radio" name="r_search"  checked/> 등록일로조회 &nbsp;&nbsp;&nbsp;
 						<input type="radio" name="r_search" />상세조회 &nbsp;&nbsp;&nbsp;
 					</TD>
-				</TR>
+				</TR>-->
 				<TR >
 					<TD>
+					<!--
 					  <select name="curYear">
 					    <c:forEach   var="i" begin="0" end="5">
 					      <c:choose>
@@ -124,7 +141,7 @@ function  calcPeriod(search_period){
 					      </c:choose>
 					    </c:forEach>					
 					</select>월
-					
+					  
 					 <select name="curDay">
 					  <c:forEach   var="i" begin="1" end="31">
 					      <c:choose>
@@ -137,6 +154,8 @@ function  calcPeriod(search_period){
 					      </c:choose>
 					    </c:forEach>	
 					</select>일  &nbsp;이전&nbsp;&nbsp;&nbsp;&nbsp; 
+					
+					
 					<a href="javascript:search_goods_list('today')">
 					   <img   src="${contextPath}/resources/image/btn_search_one_day.jpg">
 					</a>
@@ -147,7 +166,7 @@ function  calcPeriod(search_period){
 					   <img   src="${contextPath}/resources/image/btn_search_2_week.jpg">
 					</a>
 					<a href="javascript:search_goods_list('one_month')">
-					   <img   src="${pageContext.request.contextPath}/resources/image/btn_search_1_month.jpg">
+					   <img   src="${contextPath}/resources/image/btn_search_1_month.jpg">
 					</a>
 					<a href="javascript:search_goods_list('two_month')">
 					   <img   src="${contextPath}/resources/image/btn_search_2_month.jpg">
@@ -159,27 +178,29 @@ function  calcPeriod(search_period){
 					   <img   src="${contextPath}/resources/image/btn_search_4_month.jpg">
 					</a>
 					&nbsp;까지 조회
+					
+					-->
 					</TD>
 				</TR>
 				<tr>
 				  <td>
-				    <select name="search_condition" disabled >
-						<option value="전체" checked>전체</option>
-						<option value="제품번호">상품번호</option>
-						<option value="제품이름">상품이름</option>
-						<option value="제조사">제조사</option>
+				    <select name="search_condition" >
+						<option value="all">전체</option>
+						<option value="goods_id">상품번호</option>
+						<option value="goods_title">상품이름</option>
+						<option value="goods_publisher">제조사</option>
 					</select>
-					<input  type="text"  size="30"  disabled/>  
-					<input   type="button"  value="조회" disabled/>
+					<input  type="text"  name="search" size="30" value="${search }" />  
+					<input   type="submit"  value="조회"/>
 				  </td>
 				</tr>
 				<tr>
 				  <td>
-					조회한 기간:<input  type="text"  size="4" value="${beginYear}" />년
-							<input  type="text"  size="4" value="${beginMonth}"/>월	
-							 <input  type="text"  size="4" value="${beginDay}"/>일	
+					입고 일자:<input  type="text"  name="beginYear" size="4" value="${beginYear }" />년
+							<input  type="text"  name="beginMonth" size="4" value="${beginMonth}"/>월	
+							 <input  type="text"  name="beginDay" size="4" value="${beginDay}"/>일	
 							 &nbsp; ~
-							<input  type="text"  size="4" value="${endYear }" />년 
+							<input  type="text"  name="endYear" size="4" value="${endYear }" />년 
 							<input  type="text"  size="4" value="${endMonth }"/>월	
 							 <input  type="text"  size="4" value="${endDay }"/>일							 
 				  </td>
@@ -189,6 +210,9 @@ function  calcPeriod(search_period){
 		<DIV class="clear">
 	</DIV>
 </form>	
+
+
+
 <DIV class="clear"></DIV>
 <TABLE class="list_view">
 		<TBODY align=center >
@@ -247,18 +271,30 @@ function  calcPeriod(search_period){
            <tr>
              <td colspan=8 class="fixed">
                  <c:forEach   var="page" begin="1" end="10" step="1" >
+                 
 		         <c:if test="${section >1 && page==1 }">
-		          <a href="${contextPath}/admin/goods/adminGoodsMain.do?chapter=${section-1}&pageNum=${(section-1)*10 +1 }">&nbsp; &nbsp;</a>
+		          <a href="${contextPath}/admin/goods/adminGoodsMain.do?
+		          			beginYear=${beginYear }&beginMonth=${beginMonth }&beginDay=${beginDay }
+		          			&chapter=${section-1}&pageNum=${(section-1)*10 +1 }">&nbsp; &nbsp;</a>
 		         </c:if>
-		          <a href="${contextPath}/admin/goods/adminGoodsMain.do?chapter=${section}&pageNum=${page}">${(section-1)*10 +page } </a>
+		         
+		          <a href="${contextPath}/admin/goods/adminGoodsMain.do?
+		          			beginYear=${beginYear }&beginMonth=${beginMonth }&beginDay=${beginDay }
+		          			&chapter=${section}&pageNum=${page}">${(section-1)*10 +page } </a>
+		        
 		         <c:if test="${page ==10 }">
-		          <a href="${contextPath}/admin/goods/adminGooodsMain.do?chapter=${section+1}&pageNum=${section*10+1}">&nbsp; next</a>
+		          <a href="${contextPath}/admin/goods/adminGooodsMain.do?
+		          			beginYear=${beginYear }&beginMonth=${beginMonth }&beginDay=${beginDay }
+		          			&chapter=${section+1}&pageNum=${section*10+1}">&nbsp; next</a>
 		         </c:if> 
+	      		
 	      		</c:forEach> 
-     
+    		 </td>
+    		 </tr>
 		</TBODY>
 		
 	</TABLE>
+	
 	<DIV class="clear"></DIV>
 	<br><br><br>
 <H3>상품등록하기</H3>
