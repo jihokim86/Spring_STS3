@@ -3,6 +3,8 @@
 	isELIgnored="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+
 <c:set var="contextPath"  value="${pageContext.request.contextPath}"  />
 <c:set var="goods"  value="${goodsMap.goods}"  />
 <c:set var="imageFileList"  value="${goodsMap.imageFileList}"  />
@@ -25,12 +27,22 @@ function init(){
 </script>
 </c:when>
 </c:choose>
+
+
 <script type="text/javascript">
+
+/* 수정반영 버튼 onClick="fn_modify_goods('${goods.goods_id }','goods_sort')" */
+
 function fn_modify_goods(goods_id, attribute){
-	var frm_mod_goods=document.frm_mod_goods;
-	var value="";
-	if(attribute=='goods_sort'){
-		value=frm_mod_goods.goods_sort.value;
+	
+	var frm_mod_goods=document.frm_mod_goods; //form name
+	
+	var value="";	// value 값을 공백으로
+	
+	if(attribute=='goods_sort'){ //attribute 값이 goods_sort라면~
+		
+		value=frm_mod_goods.goods_sort.value; //form안의 goods_sort이름을 가진 태그의 값을 value에 저장
+		
 	}else if(attribute=='goods_title'){
 		value=frm_mod_goods.goods_title.value;
 	}else if(attribute=='goods_writer'){
@@ -67,6 +79,9 @@ function fn_modify_goods(goods_id, attribute){
 		value=frm_mod_goods.recommendation.value;
 	}
 
+	
+	// data를 ajax에 담아서 전달
+	
 	$.ajax({
 		type : "post",
 		async : false, //false인 경우 동기식으로 처리한다.
@@ -76,6 +91,8 @@ function fn_modify_goods(goods_id, attribute){
 			attribute:attribute,
 			value:value
 		},
+		
+		//이건 모르겠네...
 		success : function(data, textStatus) {
 			if(data.trim()=='mod_success'){
 				alert("상품 정보를 수정했습니다.");
@@ -115,6 +132,8 @@ function fn_modify_goods(goods_id, attribute){
 	  cnt++;
   }
   
+  
+  
   function modifyImageFile(fileId,goods_id, image_id,fileType){
     // alert(fileId);
 	  var form = $('#FILE_FORM')[0];
@@ -136,6 +155,8 @@ function fn_modify_goods(goods_id, attribute){
       });
   }
   
+  
+  
   function addNewImageFile(fileId,goods_id, fileType){
 	   //  alert(fileId);
 		  var form = $('#FILE_FORM')[0];
@@ -155,6 +176,8 @@ function fn_modify_goods(goods_id, attribute){
 	                  }
 	          });
 	  }
+  
+  
   
   function deleteImageFile(goods_id,image_id,imageFileName,trId){
 	var tr = document.getElementById(trId);
@@ -179,9 +202,13 @@ function fn_modify_goods(goods_id, attribute){
     		}
     	}); //end ajax	
   }
+  
+  
 </script>
 
 </HEAD>
+
+
 <BODY>
 <form  name="frm_mod_goods"  method=post >
 <DIV class="clear"></DIV>
@@ -196,11 +223,15 @@ function fn_modify_goods(goods_id, attribute){
 			<li><A href="#tab6">추천사</A></li>
 			<li><A href="#tab7">상품이미지</A></li>
 		</UL>
+		
 		<DIV class="tab_container">
 			<DIV class="tab_content" id="tab1">
-				<table >
+				
+			<table >
 			<tr >
-				<td width=200 >상품분류</td>
+				<td width=200 >
+					상품분류
+				</td>
 				<td width=500>
 				  <select name="goods_sort">
 					<c:choose>
@@ -219,6 +250,8 @@ function fn_modify_goods(goods_id, attribute){
 				 <input  type="button" value="수정반영"  onClick="fn_modify_goods('${goods.goods_id }','goods_sort')"/>
 				</td>
 			</tr>
+			
+			
 			<tr >
 				<td >상품이름</td>
 				<td><input name="goods_title" type="text" size="40"  value="${goods.goods_title }"/></td>
@@ -427,7 +460,10 @@ function fn_modify_goods(goods_id, attribute){
 					</tr>
 			    </table>
 			</DIV>
+			
+			
 			<DIV class="tab_content" id="tab7">
+			
 			   <form id="FILE_FORM" method="post" enctype="multipart/form-data"  >
 				<h4>상품이미지</h4>
 				 <table>

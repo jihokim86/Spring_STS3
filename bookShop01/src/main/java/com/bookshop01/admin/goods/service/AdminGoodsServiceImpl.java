@@ -44,12 +44,14 @@ public class AdminGoodsServiceImpl implements AdminGoodsService {
 		return adminGoodsDAO.selectNewGoodsList(condMap);
 	}
 	
-	
+	//상품수정=상품상세보기 클릭시
 	@Override
 	public Map goodsDetail(int goods_id) throws Exception {
+		
 		Map goodsMap = new HashMap();
 		GoodsVO goodsVO=adminGoodsDAO.selectGoodsDetail(goods_id);
 		List imageFileList =adminGoodsDAO.selectGoodsImageFileList(goods_id);
+		
 		goodsMap.put("goods", goodsVO);
 		goodsMap.put("imageFileList", imageFileList);
 		return goodsMap;
